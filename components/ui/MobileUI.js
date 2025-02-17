@@ -9,6 +9,7 @@ import { Dimensions } from "react-native";
 import { VictoryLine, VictoryChart, VictoryArea } from "victory-native";
 import ChartComponent from "./DonutChart";
 import HolderUi from "./HolderUI";
+import ProgressBar from "./ProgressbarUI";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -23,7 +24,9 @@ const HomeScreen = () => {
         <View style={styles.holdercontainer}>
           <View style={styles.box}>
             <View style={styles.insideContainer}>
-              <View style={[styles.imageBox, { backgroundColor: "#4BC0C0",}]}>3</View>
+              <View style={[styles.imageBox, { backgroundColor: "#4BC0C0" }]}>
+                3
+              </View>
               <View style={styles.firstView}>
                 <Text style={styles.legendText}> New Holders</Text>
                 <Text style={styles.legendPopulation}>9,999,999,999</Text>
@@ -32,7 +35,9 @@ const HomeScreen = () => {
           </View>
           <View style={styles.box}>
             <View style={styles.insideContainer}>
-              <View style={[styles.imageBox, { backgroundColor: "#FFBB28",}]}>3</View>
+              <View style={[styles.imageBox, { backgroundColor: "#FFBB28" }]}>
+                3
+              </View>
               <View style={styles.firstView}>
                 <Text style={styles.legendText}> Lost Holders</Text>
                 <Text style={styles.legendPopulation}>9,999,999,999</Text>
@@ -43,7 +48,9 @@ const HomeScreen = () => {
         <View style={styles.holdercontainer}>
           <View style={styles.box}>
             <View style={styles.insideContainer}>
-              <View style={[styles.imageBox, { backgroundColor: "#36A2EB",}]}>3</View>
+              <View style={[styles.imageBox, { backgroundColor: "#36A2EB" }]}>
+                3
+              </View>
               <View style={styles.firstView}>
                 <Text style={styles.legendText}> Nil Holders</Text>
                 <Text style={styles.legendPopulation}>9,999,999,999</Text>
@@ -52,7 +59,9 @@ const HomeScreen = () => {
           </View>
           <View style={styles.box}>
             <View style={styles.insideContainer}>
-              <View style={[styles.imageBox, { backgroundColor: "#FF6384",}]}>3</View>
+              <View style={[styles.imageBox, { backgroundColor: "#FF6384" }]}>
+                3
+              </View>
               <View style={styles.firstView}>
                 <Text style={styles.legendText}> Active Holders</Text>
                 <Text style={styles.legendPopulation}>9,999,999,999</Text>
@@ -73,8 +82,9 @@ const HomeScreen = () => {
             selectedValue={selectedOption}
             onValueChange={(itemValue) => setSelectedOption(itemValue)}
             style={styles.picker}
-            dropdownIconColor="#1E1E1E"
+            dropdownIconColor="white"
             mode="dropdown"
+            
           >
             <Picker.Item
               label="Shipline Corporation"
@@ -154,8 +164,10 @@ const HomeScreen = () => {
             <Text style={styles.percentageHolder}>0.2% MoM</Text>
           </View>
         </View>
+
         {TwoDivsInRow()}
       </View>
+      <ProgressBar />
     </ScrollView>
   );
 };
@@ -211,7 +223,7 @@ const styles = StyleSheet.create({
   },
   chartTitle: { color: "white", fontSize: 16, fontWeight: "bold" },
   price: { color: "white", fontSize: 24, fontWeight: "bold" },
-  percentage: { color: "green", fontSize: 14, fontWeight: "600", marginTop:8 },
+  percentage: { color: "green", fontSize: 14, fontWeight: "600", marginTop: 8 },
   searchIcon: {
     marginRight: 10,
   },
@@ -276,6 +288,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between", // Ensures space between text and chart
+    marginLeft:7
   },
   linecontainer: {
     alignItems: "center",
@@ -306,12 +319,12 @@ const styles = StyleSheet.create({
     //backgroundColor: "white",
     //padding: 10,
     // marginBottom: 5,
-    marginLeft:12
+    marginLeft: 12,
     // marginRight: 20,
   },
-  firstViewHolder:{
+  firstViewHolder: {
     marginBottom: 15,
-    marginLeft:12
+    marginLeft: 12,
   },
   secondView: {
     // backgroundColor: "green",
@@ -334,19 +347,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between", // distributes extra space between boxes
     padding: 11,
-   // backgroundColor: "#000", // for visual contrast
+    // backgroundColor: "#000", // for visual contrast
   },
-  holdercontainer2: {
-    
-  },
+  holdercontainer2: {},
   // Each box is ~45% of the container's width.
   // The remaining ~10% is the gap between them.
   box: {
     width: "45%",
-   // backgroundColor: "#ddd",
+    // backgroundColor: "#ddd",
     //padding: 20,
     borderRadius: 8,
-    marginTop:10
+    marginTop: 10,
   },
   boxText: {
     textAlign: "center",
@@ -368,17 +379,22 @@ const styles = StyleSheet.create({
     justifyContent: "center", // centers content vertically
     alignItems: "center", // centers content horizontally
     backgroundColor: "#FFBB28",
-    borderRadius: 4
+    borderRadius: 4,
   },
   legendText: {
     fontSize: 14,
     color: "#fff",
-    marginLeft:-4
+    marginLeft: -4,
   },
   legendPopulation: {
     fontSize: 14,
     color: "#fff",
     fontWeight: "600",
   },
-  percentageHolder: { color: "red", fontSize: 14, fontWeight: "700", marginTop:8 },
+  percentageHolder: {
+    color: "red",
+    fontSize: 14,
+    fontWeight: "700",
+    marginTop: 8,
+  },
 });

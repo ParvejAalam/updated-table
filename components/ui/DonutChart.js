@@ -130,6 +130,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between", // spread the two columns apart
     marginHorizontal: 20, // adjust horizontal margin as needed
     marginTop: 10,
+    marginLeft: 7,
   },
   legendColumnContainer: {
     flexDirection: "column",
@@ -143,7 +144,7 @@ const styles = StyleSheet.create({
   legendColor: {
     width: 12,
     height: 12,
-   // borderRadius: 6,
+    borderRadius: 3,
     marginRight: 8,
     marginTop: 3, // add margin to adjust vertical alignment with text if needed
   },
