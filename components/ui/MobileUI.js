@@ -174,37 +174,6 @@ const HomeScreen = () => {
 
 export default HomeScreen;
 
-// const Tab = createBottomTabNavigator();
-
-// export default function App() {
-//   return (
-//     <NavigationContainer>
-//       <Tab.Navigator
-//         screenOptions={({ route }) => ({
-//           tabBarIcon: ({ color, size }) => {
-//             let iconName;
-//             if (route.name === 'Home') {
-//               iconName = 'home';
-//             } else if (route.name === 'Capital Reg') {
-//               iconName = 'bar-chart';
-//             } else if (route.name === 'Holder Reg') {
-//               iconName = 'search';
-//             } else {
-//               iconName = 'menu';
-//             }
-//             return <MaterialIcons name={iconName} size={size} color={color} />;
-//           },
-//         })}
-//       >
-//         <Tab.Screen name="Home" component={HomeScreen} />
-//         <Tab.Screen name="Capital Reg" component={HomeScreen} />
-//         <Tab.Screen name="Holder Reg" component={HomeScreen} />
-//         <Tab.Screen name="Menu" component={HomeScreen} />
-//       </Tab.Navigator>
-//     </NavigationContainer>
-//   );
-// }
-
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#121212", padding: 20 },
   title: { color: "white", fontSize: 18, fontWeight: "bold", marginBottom: 10 },
