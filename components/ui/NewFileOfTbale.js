@@ -13,58 +13,11 @@ import Collapsible from "react-native-collapsible";
 
 const { width } = Dimensions.get("window");
 
-const DATA = [
-  {
-    id: "1",
-    name: "Share Class",
-    details: [
-      { key: "Detail 1", value: "D1" },
-      { key: "Detail 2", value: "D2" },
-      { key: "Detail 3", value: "D3" },
-      { key: "Detail 4", value: "D4" },
-    ],
-    otherColumns: ["Register", "Balance", "Price", "Value"],
-  },
-  {
-    id: "2",
-    name: "BUYFIRST",
-    details: [],
-    otherColumns: ["A2", "B2", "C2", "D2"],
-  },
-  {
-    id: "3",
-    name: "Common Stock 1",
-    details: [
-      { key: "Detail 1", value: "D5" },
-      { key: "Detail 2", value: "D6" },
-    ],
-    otherColumns: ["A3", "B3", "C3", "D3"],
-  },
-  {
-    id: "4",
-    name: "Common Stock 2",
-    details: [
-      { key: "Detail 1", value: "D7" },
-      { key: "Detail 2", value: "D8" },
-    ],
-    otherColumns: ["A4", "B4", "C4", "D4"],
-  },
-  {
-    id: "5",
-    name: "DSPP-SP1 R/T And Batch W/Fees",
-    details: [
-      { key: "Detail 1", value: "D9" },
-      { key: "Detail 2", value: "D10" },
-    ],
-    otherColumns: ["A5", "B5", "C5", "D5"],
-  },
-];
-
-const TableApp = () => {
+const TableApp = ({ DATA }) => {
   const [expandedRows, setExpandedRows] = useState({});
   const scrollViewRefs = useRef([]);
   const [scrollHandlerIds, setScrollHandlerIds] = useState([]);
-  const detailScrollRefs = useRef(new Set()) // Store all detail row refs
+  const detailScrollRefs = useRef(new Set()); // Store all detail row refs
 
   useEffect(() => {
     const ids = DATA.map((item) => item.id);
@@ -104,7 +57,7 @@ const TableApp = () => {
           item.id === DATA.length.toString() && styles.mainRow,
         ]}
       >
-        {item.details.length ? (
+        {typeof item.details == "string" && item.details !== "" ? (
           <TouchableOpacity
             onPress={() => toggleExpand(item.id)}
             style={styles.frozenColumn}
@@ -152,34 +105,56 @@ const TableApp = () => {
       </View>
 
       <Collapsible collapsed={!expandedRows[item.id]}>
-  {item.details.map((detail, detailIndex) => (
-    <View key={detailIndex} style={styles.row}>
-      <View style={styles.frozenColumnPlaceholder} />
+        {typeof item.details !== "string" ? (
+          <>
+            {" "}
+            {item.details.map((detail, detailIndex) => (
+              <View key={detailIndex} style={styles.row}>
+                <View style={styles.frozenColumnPlaceholder} />
 
-      <ScrollView
-        horizontal
-        style={styles.scrollableRow}
-        showsHorizontalScrollIndicator={detailIndex === item.details.length - 1}
-        ref={(el) => {
-          if (el && !detailScrollRefs.current.has(el)) {
-            detailScrollRefs.current.add(el); // Add ref to Set
-          }
-        }}
-        onScroll={handleDetailScroll}
-        scrollEventThrottle={16}
-      >
-        <View style={styles.otherColumns}>
-          {item.otherColumns.map((_, colIndex) => (
-            <Text key={colIndex} style={styles.text}>
-              {colIndex === 0 ? detail.value : "-"}
-            </Text>
-          ))}
-        </View>
-      </ScrollView>
-    </View>
-  ))}
-</Collapsible>
-
+                <ScrollView
+                  horizontal
+                  style={styles.scrollableRow}
+                  showsHorizontalScrollIndicator={
+                    detailIndex === item.details.length - 1
+                  }
+                  ref={(el) => {
+                    if (el && !detailScrollRefs.current.has(el)) {
+                      detailScrollRefs.current.add(el); // Add ref to Set
+                    }
+                  }}
+                  onScroll={handleDetailScroll}
+                  scrollEventThrottle={16}
+                >
+                  <View style={styles.otherColumns}>
+                    {item.otherColumns.map((_, colIndex) => (
+                      <Text key={colIndex} style={styles.text}>
+                        {colIndex === 0 ? detail.value : "-"}
+                      </Text>
+                    ))}
+                  </View>
+                </ScrollView>
+              </View>
+            ))}
+          </>
+        ) : (
+          <View style={styles.accordionContainer}>
+            <View style={styles.frozenColumnAccordion}>
+              <Text style={styles.detailsText}>Details</Text>
+            </View>
+            <ScrollView
+              horizontal={true}
+              showsHorizontalScrollIndicator={true}
+              style={styles.scrollableDetails}
+              ref={(el) => (scrollViewRefs.current[index + DATA.length] = el)}
+            >
+              <View style={styles.detailRow}>
+                <Text style={styles.detailsText}>{item.details}</Text>
+              </View>
+            </ScrollView>
+          </View>
+        )}
+      </Collapsible>
     </>
   );
 
@@ -208,8 +183,9 @@ const styles = StyleSheet.create({
     marginBottom: 0,
     position: "relative",
     flex: 1,
-    height: 50, // Set fixed height for each row
+    height: "100%", // Set fixed height for each row
   },
+
   frozenColumn: {
     width: width < 600 ? width * 0.35 : 155,
     backgroundColor: Platform.OS === "web" ? "white" : "black",
@@ -233,7 +209,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     padding: 10,
-    borderWidth: 1,
+    borderWidth: 1, // if no need of border then border can be 0
     borderColor: "#555",
     color: Platform.OS === "web" ? "black" : "white",
     fontWeight: "400",
@@ -244,7 +220,7 @@ const styles = StyleSheet.create({
   },
   accordionContainer: {
     flexDirection: "row",
-    marginTop: -5,
+    marginTop: 5,
     zIndex: 0,
   },
   frozenColumnAccordion: {
@@ -267,7 +243,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     minWidth: 620,
     borderWidth: 1,
-    borderColor: "#777",
+    borderColor: "#555",
   },
   detailColumn: {
     flexDirection: "column",
@@ -275,7 +251,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     minWidth: 155,
     borderWidth: 1,
-    borderColor: "#777",
+    borderColor: "#555",
   },
   detailsText: {
     fontSize: 14,
@@ -292,7 +268,7 @@ const styles = StyleSheet.create({
   detailRow: {
     flexDirection: "row",
     alignItems: "center",
-    height: 50, // Match main row height
+    height: "100%", // Match main row height
     backgroundColor: Platform.OS === "web" ? "white" : "black", // Match main row color
     borderBottomWidth: 1,
     borderColor: "#555", // Same as main row
