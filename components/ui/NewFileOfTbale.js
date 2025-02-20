@@ -12,6 +12,8 @@ import {
 import Collapsible from "react-native-collapsible";
 
 const { width } = Dimensions.get("window");
+const ROW_HEIGHT = 50; // Fixed height for rows across platforms
+//new changes
 
 const TableApp = ({ DATA }) => {
   const [expandedRows, setExpandedRows] = useState({});
@@ -33,7 +35,7 @@ const TableApp = ({ DATA }) => {
 
   const handleScroll = (event) => {
     const scrollX = event.nativeEvent.contentOffset.x;
-    scrollViewRefs.current.forEach((scrollView, index) => {
+    scrollViewRefs.current.forEach((scrollView) => {
       if (scrollView) {
         scrollView.scrollTo({ x: scrollX, animated: false });
       }
@@ -51,17 +53,9 @@ const TableApp = ({ DATA }) => {
 
   const renderItem = ({ item, index }) => (
     <>
-      <View
-        style={[
-          styles.row,
-          item.id === DATA.length.toString() && styles.mainRow,
-        ]}
-      >
-        {typeof item.details == "string" && item.details !== "" ? (
-          <TouchableOpacity
-            onPress={() => toggleExpand(item.id)}
-            style={styles.frozenColumn}
-          >
+      <View style={[styles.row, item.id === DATA.length.toString() && styles.mainRow]}>
+        {typeof item.details === "string" && item.details !== "" ? (
+          <TouchableOpacity onPress={() => toggleExpand(item.id)} style={styles.frozenColumn}>
             <Text style={styles.text}>
               {item.name}
               {expandedRows[item.id]
@@ -76,7 +70,7 @@ const TableApp = ({ DATA }) => {
         )}
 
         <ScrollView
-          horizontal={true}
+          horizontal
           showsHorizontalScrollIndicator={item.id === DATA.length.toString()}
           style={styles.scrollableRow}
           ref={(el) => (scrollViewRefs.current[index] = el)}
@@ -91,8 +85,8 @@ const TableApp = ({ DATA }) => {
                     <Text style={styles.text}>
                       {col}{" "}
                       {expandedRows[item.id]
-                        ? " " + String.fromCharCode(8595)
-                        : " " + String.fromCharCode(8593)}
+                        ? String.fromCharCode(8595)
+                        : String.fromCharCode(8593)}
                     </Text>
                   </TouchableOpacity>
                 ) : (
@@ -107,7 +101,6 @@ const TableApp = ({ DATA }) => {
       <Collapsible collapsed={!expandedRows[item.id]}>
         {typeof item.details !== "string" ? (
           <>
-            {" "}
             {item.details.map((detail, detailIndex) => (
               <View key={detailIndex} style={styles.row}>
                 <View style={styles.frozenColumnPlaceholder} />
@@ -115,9 +108,7 @@ const TableApp = ({ DATA }) => {
                 <ScrollView
                   horizontal
                   style={styles.scrollableRow}
-                  showsHorizontalScrollIndicator={
-                    detailIndex === item.details.length - 1
-                  }
+                  showsHorizontalScrollIndicator={detailIndex === item.details.length - 1}
                   ref={(el) => {
                     if (el && !detailScrollRefs.current.has(el)) {
                       detailScrollRefs.current.add(el); // Add ref to Set
@@ -143,8 +134,8 @@ const TableApp = ({ DATA }) => {
               <Text style={styles.detailsText}>Details</Text>
             </View>
             <ScrollView
-              horizontal={true}
-              showsHorizontalScrollIndicator={true}
+              horizontal
+              showsHorizontalScrollIndicator
               style={styles.scrollableDetails}
               ref={(el) => (scrollViewRefs.current[index + DATA.length] = el)}
             >
@@ -182,41 +173,51 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 0,
     position: "relative",
-    flex: 1,
-    height: "100%", // Set fixed height for each row
+    height: ROW_HEIGHT, // Fixed height for each row
+    // borderBottomWidth: 1,
+    
+    
   },
-
   frozenColumn: {
     width: width < 600 ? width * 0.35 : 155,
     backgroundColor: Platform.OS === "web" ? "white" : "black",
     padding: 0,
     justifyContent: "center",
     zIndex: 1,
-    height: "100%", // Ensure the column height matches the row height
+    height: ROW_HEIGHT,
+    borderWidth: 0.5,
+    borderColor: "#555",
+    borderRightWidth:0
+    // borderStyle: "solid",
   },
   mainRow: {
     zIndex: 2,
+   // borderBottomWidth: 0.5,
   },
   scrollableRow: {
-    marginLeft: Platform.OS === "web" ? 0 : 11, // Adjust margin for web app
-    flex: 1,
+    marginLeft: Platform.OS === "web" ? 0 : 11,
+    height: ROW_HEIGHT,
     zIndex: 1,
-    height: "100%", // Ensure the scrollable row height matches the row height
   },
   otherColumns: {
     flexDirection: "row",
+    borderWidth: 0.5,
+    borderColor: "#555",
+    // borderStyle: "solid",
   },
   text: {
     fontSize: 16,
     padding: 10,
-    borderWidth: 1, // if no need of border then border can be 0
+    borderWidth: 1,
     borderColor: "#555",
     color: Platform.OS === "web" ? "black" : "white",
     fontWeight: "400",
     minWidth: 155,
-    //  textAlign: "center",
-    height: "100%", // Ensure the text height matches the column height
-    lineHeight: 30, // Vertically center text
+    height: ROW_HEIGHT,
+    lineHeight: 30,
+    borderWidth: 0.5,
+    borderColor: "#555",
+    // borderStyle: "solid",
   },
   accordionContainer: {
     flexDirection: "row",
@@ -234,24 +235,28 @@ const styles = StyleSheet.create({
   },
   scrollableDetails: {
     marginLeft: width < 600 ? width * 0.4 : 170,
-    flex: 1,
     zIndex: 0,
+    height: ROW_HEIGHT,
   },
   detailsRow: {
     backgroundColor: "#555",
     padding: 10,
     flexDirection: "row",
     minWidth: 620,
-    borderWidth: 1,
+   // borderWidth: 0.5,
     borderColor: "#555",
+    // borderStyle: "solid",
+    height: ROW_HEIGHT,
   },
   detailColumn: {
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
     minWidth: 155,
-    borderWidth: 1,
+   // borderWidth: 0.5,
     borderColor: "#555",
+    // borderStyle: "solid",
+    height: ROW_HEIGHT,
   },
   detailsText: {
     fontSize: 14,
@@ -268,14 +273,15 @@ const styles = StyleSheet.create({
   detailRow: {
     flexDirection: "row",
     alignItems: "center",
-    height: "100%", // Match main row height
-    backgroundColor: Platform.OS === "web" ? "white" : "black", // Match main row color
-    borderBottomWidth: 1,
-    borderColor: "#555", // Same as main row
+    height: ROW_HEIGHT,
+    backgroundColor: Platform.OS === "web" ? "white" : "black",
+   // borderBottomWidth: 1,
+    borderColor: "#555",
   },
   frozenColumnPlaceholder: {
-    width: width < 600 ? width * 0.35 : 155, // Same width as frozenColumn
-    backgroundColor: "transparent", // Hide it visually
+    width: width < 600 ? width * 0.35 : 155,
+    backgroundColor: "transparent",
+    height: ROW_HEIGHT,
   },
 });
 
